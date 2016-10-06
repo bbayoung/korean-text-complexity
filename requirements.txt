@@ -1,0 +1,6 @@
+flake8==3.0.4
+JPype1-py3==0.5.5.2
+konlpy==0.4.4
+mccabe==0.5.2
+pycodestyle==2.0.0
+pyflakes==1.2.3
