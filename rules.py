@@ -22,7 +22,7 @@ rule_database = {
     },
     # 대등적 연결어미 : VV(VA) + ECE
     'ECE': {
-        'LABEL' : '술어',
+        'LABEL': '술어',
         'RULES': {
             -1: ['VV', 'VA', ],
         },
@@ -30,7 +30,7 @@ rule_database = {
     },
     # 대등적 연결어미 + 선어말 어미 가능성 : VV(VA) + EPT(EPP, EPH) + ECE
     'ECE': {
-        'LABEL' : '술어',
+        'LABEL': '술어',
         'RULES': {
             -2: ['VV', 'VA', ],
             -1: ['EPT', 'EPP', 'EPH', ],
@@ -59,35 +59,35 @@ rule_database = {
     # 부사격 조사
     'JKM': {
         'LABEL': '부사어',
-        'RULES': { },
+        'RULES': {},
         'RANGE': [-1, 0, ],
     },
 
     # 관형격 조사
     'JKG': {
         'LABEL': '관형어',
-        'RULES': { },
+        'RULES': {},
         'RANGE': [-1, 0, ],
     },
 
     # 부사
     'MA_': {
         'LABEL': '부사어',
-        'RULES': { },
+        'RULES': {},
         'RANGE': [0, ],
     },
 
     # 관형사
     'MD_': {
         'LABEL': '관형어',
-        'RULES': { },
+        'RULES': {},
         'RANGE': [0, ],
     },
 
     # 관형사
     'ETD': {
         'LABEL': '관형어',
-        'RULES': { },
+        'RULES': {},
         'RANGE': [-1, 0, ],
     },
 

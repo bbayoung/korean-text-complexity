@@ -1,6 +1,7 @@
 import sys
-from konlpy.tag import Twitter, Kkma
+from konlpy.tag import Kkma
 from rules import rule_database
+
 
 def analyzer(message):
     kkma = Kkma()
@@ -12,12 +13,8 @@ def analyzer(message):
     total_line = 0
     for sentence in sentences:
         morphemes = kkma.pos(sentence)
-        print('')
-        print('')
-        print('Sentence : ' + sentence)
-        print('')
-        print('Morphemes : ' + str(morphemes))
-        print('')
+        print('Sentence : {}'.format(sentence))
+        print('Morphemes : {}'.format(morphemes))
         labels = []
         score = 0
         for idx, morpheme in enumerate(morphemes):
@@ -47,7 +44,7 @@ def analyzer(message):
 
         check = {
             '주어': False,
-            '목적어' : False,
+            '목적어': False,
             '보어': False,
             '술어': False,
         }
@@ -81,9 +78,6 @@ def analyzer(message):
         total_score += score
         total_line += 1
         max_score = score if score > max_score else max_score
-
-        print(' score : ' + str(score))
-        print('')
         print('------------------------------------------------')
 
     print('total_score : {}'.format(total_score))
@@ -103,4 +97,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
