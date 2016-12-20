@@ -7,7 +7,9 @@ def analyzer(message):
 
     sentences = kkma.sentences(message)
 
-    cnt = 0
+    max_score = 0
+    total_score = 0
+    total_line = 0
     for sentence in sentences:
         morphemes = kkma.pos(sentence)
         print('')
@@ -16,6 +18,8 @@ def analyzer(message):
         print('')
         print('Morphemes : ' + str(morphemes))
         print('')
+        labels = []
+        score = 0
         for idx, morpheme in enumerate(morphemes):
             if morpheme[1] in rule_database or '{}_'.format(morpheme[1][:-1]) in rule_database:
                 if morpheme[1] in rule_database:
@@ -38,17 +42,63 @@ def analyzer(message):
                     for position in current_rule['RANGE']:
                         word += morphemes[idx + position][0]
                     label = current_rule['LABEL']
+                    labels.append(label)
                     print('{} : {}'.format(word, label))
+
+        check = {
+            '주어': False,
+            '목적어' : False,
+            '보어': False,
+            '술어': False,
+        }
+        cnt_condition_1 = 0  # 첨가조건1 의 갯수
+        cnt_condition_2 = 0  # 첨가조건2의 갯수
+
+        for label in labels:
+            if label in check:
+                check[label] = True
+            elif label in ['관형어', '부사어', '독립어']:
+                cnt_condition_1 += 1
+            elif label in ['명사절', '관형절', '부사절', '인용절', '서술절']:
+                cnt_condition_2 += 1
+
+        if check['주어'] and check['목적어'] and check['보어'] and check['술어']:
+            score = 3
+        elif check['주어'] and check['술어'] and (check['목적어'] or check['보어']):
+            score = 2
+        else:
+            score = 1  # 주어 + 술어
+
+        if cnt_condition_1 <= 3:
+            score += 0.99
+        elif cnt_condition_1 <= 6:
+            score += 1.99
+        else:
+            score += (0.33 * cnt_condition_1)
+
+        score += (3 * cnt_condition_2)
+
+        total_score += score
+        total_line += 1
+        max_score = score if score > max_score else max_score
+
+        print(' score : ' + str(score))
         print('')
         print('------------------------------------------------')
-        cnt += 1
+
+    print('total_score : {}'.format(total_score))
+    print('total_line : {}'.format(total_line))
+    print('max_score : {}'.format(max_score))
+    print('avg_score : {}'.format(total_score/total_line))
 
 
 def main():
-    # log_file = open(sys.argv[1], 'r')
-    # analyzer(log_file.read())
-    # log_file.close()
-    analyzer("철수가 중학생이 되었다. 재민이는 대학생이 아니다. 나는 10대가 아니다. 영우가 공부한다. 영우가 재민이에게 꽃을 주다. 미국은 트럼프를 대통령으로 삼다. 술은 물과 같다. 물은 바다와 같다. 소주에 맥주를 넣다. 물을 관상용으로 두다. 아이구. 자라나는 어린이는 나라의 보배이다. 예쁜 재민이는 영우를 매우 좋아한다. 그 옷은 나에게 작다. 노란 들국화가 그에게 꺾였다.")
+    if len(sys.argv) > 1:
+        log_file = open(sys.argv[1], 'r')
+        analyzer(log_file.read())
+        log_file.close()
+    else:
+        print("파일명을 입력해주세요.")
 
 
 if __name__ == '__main__':
